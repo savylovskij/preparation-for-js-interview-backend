@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { dbConfig, dbValidationSchema, typeOrmConfig } from './core/configs';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { dbConfig, dbValidationSchema, typeOrmConfig } from './core/configs';
       validationSchema: dbValidationSchema,
     }),
     TypeOrmModule.forRootAsync(typeOrmConfig),
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
