@@ -17,7 +17,7 @@ export class CreateUserDto {
   })
   @IsNotEmpty()
   @IsUUID('4')
-  id: string;
+  id!: string;
 
   @ApiProperty({
     description: 'User name',
@@ -27,7 +27,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   @MaxLength(50)
-  name: string;
+  name!: string;
 
   @ApiProperty({
     description: 'User email',
@@ -36,7 +36,7 @@ export class CreateUserDto {
   })
   @IsEmail()
   @MaxLength(50)
-  email: string;
+  email!: string;
 
   @ApiProperty({
     description: 'User password',
@@ -47,5 +47,5 @@ export class CreateUserDto {
   @IsString()
   @MaxLength(50)
   @MinLength(5)
-  password: string;
+  password!: string;
 }
