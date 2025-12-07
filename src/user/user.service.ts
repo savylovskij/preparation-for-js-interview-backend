@@ -5,10 +5,12 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
+import { plainToInstance } from 'class-transformer';
 import { Repository } from 'typeorm';
 
-import { CreateUserDto } from './dto/create-user.dto';
+import type { FirebaseUser } from '../core/models/user';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserDto } from './dto/user.dto';
 import { UserEntity } from './entities/user.entity';
 
 @Injectable()
@@ -18,21 +20,51 @@ export class UserService {
     private userRepository: Repository<UserEntity>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const existingUser = await this.findById(createUserDto.id);
+  async create(userRequest: FirebaseUser): Promise<UserDto> {
+    const existingUser = await this.userRepository.findOne({
+      where: {
+        firebaseId: userRequest.firebaseId,
+      },
+    });
 
     if (existingUser) {
       throw new ConflictException('User already exists');
     }
 
-    return this.userRepository.save(createUserDto);
+    const saved = await this.userRepository.save({ ...userRequest });
+
+    return plainToInstance(UserDto, saved, {
+      excludeExtraneousValues: true,
+    });
   }
 
-  async findAll(): Promise<UserEntity[]> {
-    return await this.userRepository.find();
+  async findAll(): Promise<UserDto[]> {
+    const users = await this.userRepository.find();
+
+    return plainToInstance(UserDto, users, {
+      excludeExtraneousValues: true,
+    });
   }
 
-  async findById(id: string): Promise<UserEntity> {
+  async findByFirebaseId(firebaseId: string): Promise<UserDto> {
+    const user = await this.userRepository.findOne({
+      where: {
+        firebaseId,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(
+        `User with firebaseId ${firebaseId} not found`,
+      );
+    }
+
+    return plainToInstance(UserDto, user, {
+      excludeExtraneousValues: true,
+    });
+  }
+
+  async findById(id: string): Promise<UserDto> {
     const user = await this.userRepository.findOne({
       where: {
         id,
@@ -43,21 +75,29 @@ export class UserService {
       throw new NotFoundException(`User with id ${id} not found`);
     }
 
-    return user;
+    return plainToInstance(UserDto, user, {
+      excludeExtraneousValues: true,
+    });
   }
 
-  async update(id: string, updateDto: UpdateUserDto): Promise<UserEntity> {
+  async update(id: string, updateDto: UpdateUserDto): Promise<UserDto> {
     const currentUser = await this.findById(id);
     const newUser = Object.assign(currentUser, updateDto);
 
-    return await this.userRepository.save(newUser);
+    const saved = await this.userRepository.save(newUser);
+
+    return plainToInstance(UserDto, saved, {
+      excludeExtraneousValues: true,
+    });
   }
 
-  async remove(id: string): Promise<UserEntity> {
+  async remove(id: string): Promise<UserDto> {
     const currentUser = await this.findById(id);
 
     await this.userRepository.delete(currentUser.id);
 
-    return currentUser;
+    return plainToInstance(UserDto, currentUser, {
+      excludeExtraneousValues: true,
+    });
   }
 }

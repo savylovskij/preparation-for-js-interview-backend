@@ -6,5 +6,8 @@ export const dbValidationSchema = Joi.object({
   PGUSER: Joi.string().required(),
   PGPASSWORD: Joi.string().required(),
   PGDATABASE: Joi.string().required(),
+  FIREBASE_PROJECT_ID: Joi.string().required(),
+  FIREBASE_CLIENT_EMAIL: Joi.string().required(),
+  FIREBASE_PRIVATE_KEY: Joi.string().required(),
   TYPEORM_SYNC: Joi.boolean().default(false),
 });
