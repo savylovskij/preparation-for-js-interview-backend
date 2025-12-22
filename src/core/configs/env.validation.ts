@@ -10,4 +10,6 @@ export const dbValidationSchema = Joi.object({
   FIREBASE_CLIENT_EMAIL: Joi.string().required(),
   FIREBASE_PRIVATE_KEY: Joi.string().required(),
   TYPEORM_SYNC: Joi.boolean().default(false),
+  THROTTLE_TTL: Joi.number().default(60000),
+  THROTTLE_LIMIT: Joi.number().default(10),
 });

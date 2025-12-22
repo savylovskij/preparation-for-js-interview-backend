@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { dbValidationSchema } from './core/configs';
+import { ThrottlerConfigModule } from './core/throttler';
 import { DbModule } from './db/db.module';
 import { UserModule } from './user/user.module';
 
@@ -26,6 +27,7 @@ import { UserModule } from './user/user.module';
     DbModule,
     UserModule,
     AuthModule,
+    ThrottlerConfigModule,
   ],
 })
 export class AppModule {}
