@@ -8,6 +8,11 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
 
+  app.enableCors({
+    origin: 'http://localhost:4200',
+    credentials: true,
+  });
+
   const config = new DocumentBuilder()
     .setTitle('Express API')
     .setDescription('Documentation API')
