@@ -16,7 +16,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Express API')
     .setDescription('Documentation API')
-    .setVersion('1.0')
+    .setVersion('1.01')
     .setContact('John Doe', 'https://express-api.com', 'example@mail.com')
     .build();
 
